@@ -18,7 +18,7 @@ function App() {
   return (
     <main className="flex h-screen">
       <Routes>
-        {/* public routes */}
+        {/* test */}
         <Route element={<AuthLayout />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

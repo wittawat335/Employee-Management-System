@@ -132,13 +132,6 @@ const DepartmentList = ({
             <>
               <ButtonGroup variant="outlined" aria-label="Basic button group">
                 <IconButton
-                  aria-label="view"
-                  color="secondary"
-                  onClick={() => handleView(id)}
-                >
-                  <VisibilityOutlinedIcon />
-                </IconButton>
-                <IconButton
                   aria-label="edit"
                   color="warning"
                   onClick={() => handleUpdate(id)}

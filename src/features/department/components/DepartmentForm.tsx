@@ -48,7 +48,7 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
       : await updateDepartment(request);
   };
 
-  const isOnSubmit = useCallback((values: DepartmenSchema) => {
+  const testSubmit = useCallback((values: DepartmenSchema) => {
     window.alert(JSON.stringify(values, null, 4));
   }, []);
 
@@ -61,37 +61,34 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
     }
   }, [isAddError]);
 
-  const NewForm = () => {
-    return (
-      <form onSubmit={handleSubmit(isOnSubmit)}>
-        <Grid container>
-          <Grid item xs={12} sm={12} md={12}>
-            <Stack spacing={2} margin={2}>
-              <MuiTextField
-                name={"departmentName"}
-                label={"Datepartment Name"}
-                control={control}
-                isAction={isAction}
-              />
-              {isAction != "View" ? (
-                <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  Save
-                </Button>
-              ) : null}
-            </Stack>
-          </Grid>
-        </Grid>
-      </form>
-    );
-  };
+  //useEffect(() => {
+  //  reset(dataToEdit);
+  // }, [reset]);
 
-  const EditForm = () => {
-    return (
-      <form onSubmit={handleSubmit(isOnSubmit)}>
+  //useEffect(() => {
+  // console.log(dataToEdit);
+  //}, [dataToEdit]);
+
+  useEffect(() => {
+    if (addSuccess) {
+      toast.success(messages.add_success);
+      reset();
+      onClose();
+    }
+  }, [addSuccess]);
+
+  useEffect(() => {
+    if (updateSuccess) {
+      toast.success(messages.update_success);
+      reset();
+      onClose();
+    }
+  }, [updateSuccess]);
+
+  return (
+    <>
+      {" "}
+      <form onSubmit={handleSubmit(testSubmit)}>
         <Grid container>
           {" "}
           <Grid item xs={12} sm={12} md={12}>
@@ -127,34 +124,8 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
           </Grid>
         </Grid>
       </form>
-    );
-  };
-
-  //useEffect(() => {
-  //  reset(dataToEdit);
-  // }, [reset]);
-
-  //useEffect(() => {
-  // console.log(dataToEdit);
-  //}, [dataToEdit]);
-
-  useEffect(() => {
-    if (addSuccess) {
-      toast.success(messages.add_success);
-      reset();
-      onClose();
-    }
-  }, [addSuccess]);
-
-  useEffect(() => {
-    if (updateSuccess) {
-      toast.success(messages.update_success);
-      reset();
-      onClose();
-    }
-  }, [updateSuccess]);
-
-  return <>{isAction == "New" ? NewForm() : EditForm()}</>;
+    </>
+  );
 };
 
 export default DepartmentForm;

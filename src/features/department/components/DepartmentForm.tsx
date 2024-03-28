@@ -12,7 +12,11 @@ import { DepartmenSchema, DepartmentValidation } from "@/lib/validation/schema";
 import { Button, Grid, Stack } from "@mui/material";
 import { IAuth } from "@/types/Auth";
 import { ActiveItems } from "@/data/data";
-import { MuiRadioGroup, MuiTextField } from "@/components/shared";
+import {
+  MuiRadioGroup,
+  MuiTextField,
+  MuiTextFieldReadOnly,
+} from "@/components/shared";
 
 type FormProps = {
   user: IAuth | null;
@@ -93,33 +97,30 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
           {" "}
           <Grid item xs={12} sm={12} md={12}>
             <Stack spacing={2} margin={2}>
-              <MuiTextField
-                name={"departmentId"}
-                label={"Department ID"}
-                control={control}
-                isAction={isAction}
-              />
+              {isAction == "Edit" ? (
+                <MuiTextFieldReadOnly
+                  name={"departmentId"}
+                  label={"Department ID"}
+                  control={control}
+                />
+              ) : null}
               <MuiTextField
                 name={"departmentName"}
                 label={"Department Name"}
                 control={control}
                 isAction={isAction}
               />
-              <MuiRadioGroup
-                label={"Active"}
-                name="active"
-                options={ActiveItems}
-                control={control}
-              />
-              {isAction != "View" ? (
-                <Button
-                  variant="contained"
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  Save
-                </Button>
+              {isAction == "Edit" ? (
+                <MuiRadioGroup
+                  label={"Active"}
+                  name="active"
+                  options={ActiveItems}
+                  control={control}
+                />
               ) : null}
+              <Button variant="contained" type="submit" disabled={isSubmitting}>
+                Save
+              </Button>
             </Stack>
           </Grid>
         </Grid>

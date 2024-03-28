@@ -58,11 +58,11 @@ export const EmployeeValidation = z.object({
 });
 
 export const DepartmentValidation = z.object({
-  //departmentId: z.string(),
+  departmentId: z.string(),
   departmentName: z.string().min(2),
-  //active: z.string(),
-  //createdBy: z.string(),
-  //modifiedBy: z.string(),
+  active: z.string(),
+  createdBy: z.string(),
+  modifiedBy: z.string(),
 });
 
 export type DepartmenSchema = z.infer<typeof DepartmentValidation>;

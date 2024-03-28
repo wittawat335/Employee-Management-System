@@ -21,7 +21,7 @@ import {
 type FormProps = {
   user: IAuth | null;
   isAction: string;
-  dataToEdit: IDepartmentList | undefined;
+  dataToEdit: IDepartment | undefined;
   onClose: () => void;
 };
 
@@ -35,7 +35,12 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
 
   const methods = useForm<DepartmenSchema>({
     resolver: zodResolver(DepartmentValidation),
-    values: dataToEdit,
+    defaultValues: {
+      departmentId: "",
+      active: "1",
+      createdBy: user?.username,
+      modifiedBy: user?.username,
+    },
     mode: "onChange",
   });
 
@@ -52,10 +57,6 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
       : await updateDepartment(request);
   };
 
-  const testSubmit = useCallback((values: DepartmenSchema) => {
-    window.alert(JSON.stringify(values, null, 4));
-  }, []);
-
   useEffect(() => {
     if (isAddError) {
       if (addError?.data.StatusCode === 400)
@@ -65,13 +66,9 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
     }
   }, [isAddError]);
 
-  //useEffect(() => {
-  //  reset(dataToEdit);
-  // }, [reset]);
-
-  //useEffect(() => {
-  // console.log(dataToEdit);
-  //}, [dataToEdit]);
+  useEffect(() => {
+    reset(dataToEdit);
+  }, [reset]);
 
   useEffect(() => {
     if (addSuccess) {
@@ -92,7 +89,7 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
   return (
     <>
       {" "}
-      <form onSubmit={handleSubmit(testSubmit)}>
+      <form onSubmit={handleSubmit(submit)}>
         <Grid container>
           {" "}
           <Grid item xs={12} sm={12} md={12}>

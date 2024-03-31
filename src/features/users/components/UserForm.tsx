@@ -6,7 +6,7 @@ import { useAddUserMutation, useUpdateUserMutation } from "../services/userApi";
 import { Controller, useForm } from "react-hook-form";
 import { UserSchema, UserValidation } from "@/lib/validation/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
 import { messages } from "@/config/messages";
 import { ActiveItems } from "@/data/data";
@@ -24,29 +24,28 @@ type FormProps = {
 };
 
 const UserForm = ({ auth, onClose, dataToEdit, isAction }: FormProps) => {
+  console.log(dataToEdit);
   const { data: roleList, isSuccess: roleSuccess } = useGetRolesQuery();
-  const [addUser, { isSuccess: addUserSuccess }] = useAddUserMutation();
+  const [addUser, { isSuccess: addSuccess }] = useAddUserMutation();
   const [updateUser, { isSuccess: updateSuccess }] = useUpdateUserMutation();
+
+  const method = useForm<UserSchema>({
+    resolver: zodResolver(UserValidation),
+    defaultValues: {
+      id: isAction == "Edit" ? dataToEdit?.id : "",
+      password: isAction == "Edit" ? dataToEdit?.password : "",
+      roles: isAction == "Edit" ? dataToEdit?.roles : [],
+      active: "1",
+    },
+    mode: "onChange",
+  });
 
   const {
     handleSubmit,
+    reset,
     control,
     formState: { isSubmitting },
-  } = useForm<UserSchema>({
-    resolver: zodResolver(UserValidation),
-    defaultValues: {
-      id: dataToEdit?.id ? dataToEdit.id : "",
-      password: "xxxxx",
-      email: dataToEdit?.email ? dataToEdit.email : "",
-      username: dataToEdit?.username ? dataToEdit.username : "",
-      fullname: dataToEdit?.fullname ? dataToEdit.fullname : "",
-      phonenumber: dataToEdit?.phonenumber
-        ? dataToEdit?.phonenumber
-        : "093xxxxxxx",
-      roles: isAction == "Edit" ? dataToEdit?.roles : [],
-      active: dataToEdit?.active ? dataToEdit?.active : "1",
-    },
-  });
+  } = method;
 
   const submit = async (request: UserSchema) => {
     try {
@@ -57,11 +56,15 @@ const UserForm = ({ auth, onClose, dataToEdit, isAction }: FormProps) => {
   };
 
   useEffect(() => {
-    if (addUserSuccess) {
+    reset(dataToEdit);
+  }, [reset]);
+
+  useEffect(() => {
+    if (addSuccess) {
       toast.success(messages.add_success);
       onClose();
     }
-  }, [addUserSuccess]);
+  }, [addSuccess]);
 
   useEffect(() => {
     if (updateSuccess) {
@@ -75,7 +78,7 @@ const UserForm = ({ auth, onClose, dataToEdit, isAction }: FormProps) => {
   }, []);
 
   return (
-    <form onSubmit={handleSubmit(isOnSubmit)}>
+    <form onSubmit={handleSubmit(submit)}>
       <Stack spacing={2} margin={2}>
         <MuiTextField
           name={"email"}
@@ -89,26 +92,13 @@ const UserForm = ({ auth, onClose, dataToEdit, isAction }: FormProps) => {
           control={control}
           isAction={isAction}
         />
-        {isAction === "New" ? (
-          <MuiTextField
-            name={"password"}
-            label={"Password"}
-            control={control}
-            isAction={isAction}
-          />
-        ) : null}
         <MuiTextField
-          name={"phonenumber"}
-          label={"Phone Number"}
+          name={"password"}
+          label={"Password"}
           control={control}
           isAction={isAction}
         />
-        <MuiTextField
-          name={"fullname"}
-          label={"Fullname"}
-          control={control}
-          isAction={isAction}
-        />
+
         {roleSuccess ? (
           <Controller
             name="roles"
@@ -119,21 +109,23 @@ const UserForm = ({ auth, onClose, dataToEdit, isAction }: FormProps) => {
                 onChange={onChange}
                 value={value}
                 chipList={roleList}
-                label={"roles"}
+                label={"Roles"}
                 isAction={isAction}
               />
             )}
           />
         ) : null}
-        <MuiRadioGroup
-          label={"Active"}
-          name="active"
-          options={ActiveItems}
-          control={control}
-        />
+        {isAction == "Edit" ? (
+          <MuiRadioGroup
+            label={"Active"}
+            name="active"
+            options={ActiveItems}
+            control={control}
+          />
+        ) : null}
         {isAction != "View" ? (
           <Button variant="contained" type="submit" disabled={isSubmitting}>
-            Save
+            {isAction == "New" ? "Save" : "Update"}
           </Button>
         ) : null}
       </Stack>

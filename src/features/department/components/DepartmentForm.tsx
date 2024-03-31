@@ -1,9 +1,5 @@
-import { IDepartment, IDepartmentList } from "@/types/Department";
-import {
-  useAddDepartmentMutation,
-  useUpdateDepartmentMutation,
-} from "../services/departmentApi";
-import { useCallback, useEffect } from "react";
+import { IDepartment } from "@/types/Department";
+import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { messages } from "@/config/messages";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +13,10 @@ import {
   MuiTextField,
   MuiTextFieldReadOnly,
 } from "@/components/shared";
+import {
+  useAddDepartmentMutation,
+  useUpdateDepartmentMutation,
+} from "../services/departmentApi";
 
 type FormProps = {
   user: IAuth | null;
@@ -73,7 +73,6 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
   useEffect(() => {
     if (addSuccess) {
       toast.success(messages.add_success);
-      reset();
       onClose();
     }
   }, [addSuccess]);
@@ -81,7 +80,6 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
   useEffect(() => {
     if (updateSuccess) {
       toast.success(messages.update_success);
-      reset();
       onClose();
     }
   }, [updateSuccess]);
@@ -116,7 +114,7 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
                 />
               ) : null}
               <Button variant="contained" type="submit" disabled={isSubmitting}>
-                Save
+                {isAction == "New" ? "Save" : "Update"}
               </Button>
             </Stack>
           </Grid>

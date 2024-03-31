@@ -238,12 +238,12 @@ const SideBar = (props: SideBarProps) => {
                 >
                   User
                 </MenuItem>
-                <MenuItem
+                {/* <MenuItem
                   onClick={() => navigate("/users")}
                   icon={<AdminPanelSettingsOutlined />}
                 >
                   Role
-                </MenuItem>
+                </MenuItem> */}
               </SubMenu>
             </Menu>
 

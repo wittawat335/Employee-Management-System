@@ -11,7 +11,7 @@ import DepartmentForm from "./DepartmentForm";
 
 const DepartmentIndex = () => {
   const { user } = useAppSelector(selectAuth);
-  const [title, setTitle] = useState("New");
+  const [title, setTitle] = useState("New Department");
   const [maxWidth, setMaxWidth] = useState<Breakpoint | false>("sm");
   const [openDialog, setOpenDialog] = useState(false);
   const [isAction, setIsAction] = useState("New");
@@ -57,13 +57,6 @@ const DepartmentIndex = () => {
     handleOpenDialog();
   };
 
-  const handleView = (id: string) => {
-    setTitle("View Department");
-    setIsAction("View");
-    setDataToEdit(Departments?.find((item) => item.id === id));
-    handleOpenDialog();
-  };
-
   return (
     <>
       <Container maxWidth={false} sx={{ p: 2 }}>
@@ -73,7 +66,6 @@ const DepartmentIndex = () => {
             user={user}
             handleNew={handleNew}
             handleUpdate={handleUpdate}
-            handleView={handleView}
           />
         ) : null}
 

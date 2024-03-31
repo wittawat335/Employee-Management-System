@@ -21,16 +21,10 @@ export const UserValidation = z.object({
   username: z
     .string()
     .min(2, { message: "Name must be at least 2 characters." }),
-  phonenumber: z
-    .string()
-    .min(10, { message: "Name must be at least 10 characters." }),
-  fullname: z
-    .string()
-    .min(2, { message: "Name must be at least 2 characters." }),
   email: z.string().email(),
   password: z
     .string()
-    .min(5, { message: "Password must be at least 5 characters." }),
+    .min(8, { message: "Password must be at least 8 characters." }),
   roles: z.string().array(),
   active: z.string(),
 });
@@ -49,9 +43,7 @@ export const EmployeeValidation = z.object({
     .min(10, { message: "Phone Number must be at least 10 characters." }),
   email: z.string().email({ message: "Not valid Email" }),
   createdBy: z.string(),
-  //createdOn: z.date(),
   modifiedBy: z.string(),
-  //modifiedOn: z.date(),
   departmentId: z.string(),
   gender: z.string(),
   active: z.string(),

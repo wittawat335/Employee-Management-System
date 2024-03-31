@@ -1,26 +1,25 @@
-import { Box, Button, ButtonGroup, Paper } from "@mui/material";
+import { Box, Button, ButtonGroup, IconButton, Paper } from "@mui/material";
 import { MouseEvent, useEffect } from "react";
-import MUIDataTable, { MUIDataTableOptions } from "mui-datatables";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { useDeleteUserMutation } from "../services/userApi";
 import { IUser } from "@/types/User";
-import Swal from "sweetalert2";
 import { toast } from "react-toastify";
 import { messages } from "@/config/messages";
+import { IAuth } from "@/types/Auth";
+import Swal from "sweetalert2";
+import MUIDataTable, { MUIDataTableOptions } from "mui-datatables";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 type Props = {
   data: Array<IUser>;
-  handleNewUser: (e: MouseEvent<HTMLButtonElement>) => void;
-  handleUpdateUser: (id: string) => void;
-  handleViewUser: (id: string) => void;
+  user: IAuth | null;
+  handleNew: (e: MouseEvent<HTMLButtonElement>) => void;
+  handleUpdate: (id: string) => void;
+  handleView: (id: string) => void;
 };
 
-const UserList = ({
-  data,
-  handleNewUser,
-  handleUpdateUser,
-  handleViewUser,
-}: Props) => {
+const UserList = ({ data, handleNew, handleUpdate, handleView }: Props) => {
   const [deleteUser, { isSuccess: deleteSuccess }] = useDeleteUserMutation();
 
   const handleDelete = async (id: string) => {
@@ -99,8 +98,21 @@ const UserList = ({
           return (
             <>
               <ButtonGroup variant="outlined" aria-label="Basic button group">
-                <Button onClick={() => handleUpdateUser(id)}>Edit</Button>
-                <Button onClick={() => handleDelete(id)}>Delete</Button>
+                <IconButton
+                  aria-label="edit"
+                  color="warning"
+                  onClick={() => handleUpdate(id)}
+                >
+                  <EditOutlinedIcon />
+                </IconButton>
+
+                <IconButton
+                  aria-label="delete"
+                  color="error"
+                  onClick={() => handleDelete(id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
               </ButtonGroup>
             </>
           );
@@ -125,9 +137,9 @@ const UserList = ({
         <Box display="flex" m={1}>
           <Box sx={{ flexGrow: 1 }}></Box>
           <Box>
-            <Button onClick={handleNewUser} variant="contained" color="info">
+            <Button onClick={handleNew} variant="contained" color="info">
               {" "}
-              Add User
+              New User
             </Button>
           </Box>
         </Box>

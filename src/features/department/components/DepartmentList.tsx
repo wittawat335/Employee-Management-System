@@ -5,29 +5,21 @@ import { toast } from "react-toastify";
 import { messages } from "@/config/messages";
 import { FaCheck, FaXmark } from "react-icons/fa6";
 import { IAuth } from "@/types/Auth";
+import { useDeleteDepartmentMutation } from "../services/departmentApi";
 import MUIDataTable, { MUIDataTableOptions } from "mui-datatables";
 import Swal from "sweetalert2";
 import DeleteIcon from "@mui/icons-material/Delete";
-import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Moment from "moment";
-import { useDeleteDepartmentMutation } from "../services/departmentApi";
 
 type Props = {
   data: Array<IDepartmentList>;
   user: IAuth | null;
   handleNew: (e: MouseEvent<HTMLButtonElement>) => void;
   handleUpdate: (id: string) => void;
-  handleView: (id: string) => void;
 };
 
-const DepartmentList = ({
-  data,
-  user,
-  handleNew,
-  handleUpdate,
-  handleView,
-}: Props) => {
+const DepartmentList = ({ data, user, handleNew, handleUpdate }: Props) => {
   const [
     deleteDepartment,
     { isSuccess: deleteSuccess, isError: deleteIsError, error: deleteError },
@@ -52,6 +44,18 @@ const DepartmentList = ({
       console.error("Error deleting :", err);
     }
   };
+
+  useEffect(() => {
+    if (deleteIsError) {
+      alert("1");
+    }
+  }, [deleteIsError]);
+
+  useEffect(() => {
+    if (deleteSuccess) {
+      toast.success(messages.delete_success);
+    }
+  }, [deleteSuccess]);
 
   const columns = [
     {
@@ -159,18 +163,6 @@ const DepartmentList = ({
     rowsPerPage: 5,
     rowsPerPageOptions: [5, 10, 25, 100],
   };
-
-  useEffect(() => {
-    if (deleteIsError) {
-      alert("1");
-    }
-  }, [deleteIsError]);
-
-  useEffect(() => {
-    if (deleteSuccess) {
-      toast.success(messages.delete_success);
-    }
-  }, [deleteSuccess]);
 
   return (
     <>

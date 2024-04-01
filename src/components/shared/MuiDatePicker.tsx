@@ -36,6 +36,7 @@ type IFormElementTypes = {
   control: any;
   required?: boolean;
   defaultValue?: string;
+  isReadonly: boolean;
 };
 
 const MuiDatePicker = ({
@@ -43,6 +44,7 @@ const MuiDatePicker = ({
   label,
   control,
   defaultValue,
+  isReadonly,
 }: IFormElementTypes) => {
   //const [value, setValue] = React.useState<string | null>(null);
   //const [value, setValue] = React.useState(dayjs("2022-04-17T15:30"));
@@ -84,6 +86,7 @@ const MuiDatePicker = ({
                 <TextField variant="outlined" {...params} />
               ),
             }}
+            readOnly={isReadonly ? true : false}
           />
         </LocalizationProvider>
       )}

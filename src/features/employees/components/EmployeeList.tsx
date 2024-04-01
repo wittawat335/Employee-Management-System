@@ -11,15 +11,23 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
+import { IAuth } from "@/types/Auth";
 
 type Props = {
   data: Array<IEmployeeList>;
+  user: IAuth | null;
   handleNew: (e: MouseEvent<HTMLButtonElement>) => void;
   handleUpdate: (id: string) => void;
   handleView: (id: string) => void;
 };
 
-const EmployeeList = ({ data, handleNew, handleUpdate, handleView }: Props) => {
+const EmployeeList = ({
+  data,
+  user,
+  handleNew,
+  handleUpdate,
+  handleView,
+}: Props) => {
   const [
     deleteEmployee,
     { isSuccess: deleteSuccess, isError: deleteError, error },
@@ -126,21 +134,25 @@ const EmployeeList = ({ data, handleNew, handleUpdate, handleView }: Props) => {
                   <VisibilityOutlinedIcon />
                 </IconButton>
 
-                <IconButton
-                  aria-label="edit"
-                  color="warning"
-                  onClick={() => handleUpdate(id)}
-                >
-                  <EditOutlinedIcon />
-                </IconButton>
-
-                <IconButton
-                  aria-label="delete"
-                  color="error"
-                  onClick={() => handleDelete(id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
+                {user.roles.indexOf("Hr") > -1 ||
+                user.roles.indexOf("Developer") > -1 ? (
+                  <>
+                    <IconButton
+                      aria-label="edit"
+                      color="warning"
+                      onClick={() => handleUpdate(id)}
+                    >
+                      <EditOutlinedIcon />
+                    </IconButton>
+                    <IconButton
+                      aria-label="delete"
+                      color="error"
+                      onClick={() => handleDelete(id)}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </>
+                ) : null}
               </ButtonGroup>
             </>
           );

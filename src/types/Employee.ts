@@ -3,7 +3,6 @@ export interface IEmployee {
   employeeId: string | null;
   firstName: string;
   lastName: string;
-  fullName: string;
   phoneNumber: string;
   email: string;
   dateOfBirth: Date | null;
@@ -14,6 +13,7 @@ export interface IEmployee {
 }
 
 export interface IEmployeeList extends IEmployee {
+  fullName: string;
   departmentName: string;
   createdBy: string | null;
   createdOn: Date | null;

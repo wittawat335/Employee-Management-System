@@ -48,6 +48,10 @@ const UserList = ({ data, handleNew, handleUpdate, handleView }: Props) => {
       label: "UserName",
     },
     {
+      name: "fullname",
+      label: "Full Name",
+    },
+    {
       name: "email",
       label: "E-Mail",
     },
@@ -59,9 +63,9 @@ const UserList = ({ data, handleNew, handleUpdate, handleView }: Props) => {
           value.map((item) => (
             <p
               className={`capitalize px-3 py-1 inline-block rounded-full text-slate-50 ${
-                item === "User"
+                item === "Hr"
                   ? "bg-green-500"
-                  : item === "Employee"
+                  : item === "User"
                   ? "bg-teal-600"
                   : item === "Manager"
                   ? "bg-cyan-600"

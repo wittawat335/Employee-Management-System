@@ -22,6 +22,7 @@ import { useAppSelector } from "@/hooks/hooks";
 import { selectAuth } from "@/features/auth/services/authSlice";
 import ManageAccountsOutlined from "@mui/icons-material/ManageAccountsOutlined";
 import AdminPanelSettingsOutlined from "@mui/icons-material/AdminPanelSettingsOutlined";
+import AccessibilityNewOutlinedIcon from "@mui/icons-material/AccessibilityNewOutlined";
 
 type SideBarProps = {
   //collapsed: boolean;
@@ -216,34 +217,31 @@ const SideBar = (props: SideBarProps) => {
               >
                 Dashboard
               </MenuItem>
-              <MenuItem
-                onClick={() => navigate("/employee")}
-                icon={<TableViewIcon />}
-              >
-                {" "}
-                Employee{" "}
-              </MenuItem>
-              <MenuItem
-                onClick={() => navigate("/department")}
-                icon={<TableViewIcon />}
-              >
-                {" "}
-                Department{" "}
-              </MenuItem>
 
               <SubMenu label="Manage" icon={<ManageAccountsOutlined />}>
                 <MenuItem
-                  onClick={() => navigate("/users")}
-                  icon={<PeopleOutlinedIcon />}
+                  onClick={() => navigate("/employee")}
+                  icon={<AccessibilityNewOutlinedIcon />}
                 >
-                  User
+                  {" "}
+                  Employee{" "}
                 </MenuItem>
-                {/* <MenuItem
-                  onClick={() => navigate("/users")}
-                  icon={<AdminPanelSettingsOutlined />}
+                <MenuItem
+                  onClick={() => navigate("/department")}
+                  icon={<TableViewIcon />}
                 >
-                  Role
-                </MenuItem> */}
+                  {" "}
+                  Department{" "}
+                </MenuItem>
+                {user.roles.indexOf("Administrator") > -1 ||
+                user.roles.indexOf("Developer") > -1 ? (
+                  <MenuItem
+                    onClick={() => navigate("/users")}
+                    icon={<PeopleOutlinedIcon />}
+                  >
+                    User
+                  </MenuItem>
+                ) : null}
               </SubMenu>
             </Menu>
 

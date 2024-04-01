@@ -47,11 +47,7 @@ const UserForm = ({ auth, onClose, dataToEdit, isAction }: FormProps) => {
   } = method;
 
   const submit = async (request: UserSchema) => {
-    try {
-      isAction == "New" ? await addUser(request) : await updateUser(request);
-    } catch (error) {
-      console.log({ error });
-    }
+    isAction == "New" ? await addUser(request) : await updateUser(request);
   };
 
   useEffect(() => {
@@ -72,6 +68,10 @@ const UserForm = ({ auth, onClose, dataToEdit, isAction }: FormProps) => {
     }
   }, [updateSuccess]);
 
+  const testSubmit = useCallback((values: UserSchema) => {
+    window.alert(JSON.stringify(values, null, 4));
+  }, []);
+
   return (
     <form onSubmit={handleSubmit(submit)}>
       <Stack spacing={2} margin={2}>
@@ -90,6 +90,12 @@ const UserForm = ({ auth, onClose, dataToEdit, isAction }: FormProps) => {
         <MuiTextField
           name={"password"}
           label={"Password"}
+          control={control}
+          isAction={isAction}
+        />
+         <MuiTextField
+          name={"fullname"}
+          label={"Full Name"}
           control={control}
           isAction={isAction}
         />

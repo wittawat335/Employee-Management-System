@@ -6,8 +6,11 @@ import { IEmployeeList } from "@/types/Employee";
 import { Loader, MuiDialog } from "@/components/shared";
 import EmployeeList from "./EmployeeList";
 import EmployeeForm from "./EmployeeForm";
+import { useAppSelector } from "@/hooks/hooks";
+import { selectAuth } from "@/features/auth/services/authSlice";
 
 const Employee = () => {
+  const { user } = useAppSelector(selectAuth);
   const [title, setTitle] = useState("New");
   const [maxWidth, setMaxWidth] = useState<Breakpoint | false>("sm");
   const [openDialog, setOpenDialog] = useState(false);
@@ -70,6 +73,7 @@ const Employee = () => {
         {fetchingSuccess ? (
           <EmployeeList
             data={Employees}
+            user={user}
             handleNew={handleNew}
             handleUpdate={handleUpdate}
             handleView={handleView}

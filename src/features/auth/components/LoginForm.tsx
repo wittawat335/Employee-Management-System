@@ -99,15 +99,7 @@ const LoginForm = () => {
             {" "}
             {isLoading ? "Loading....." : "Log in"}
           </MuiLoadingButton>
-          <p className="text-small-regular text-light-2 text-center mt-2">
-            Don&apos;t have an account?
-            <Link
-              to="/register"
-              className="text-primary-500 text-small-semibold ml-1"
-            >
-              Register
-            </Link>
-          </p>
+        
         </form>
       </div>
     </Form>

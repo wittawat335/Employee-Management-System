@@ -15,6 +15,7 @@ import {
   useUpdateEmployeeMutation,
 } from "../services/employeeApi";
 import {
+  MuiDatePicker,
   MuiRadioGroup,
   MuiSelectField,
   MuiTextField,
@@ -133,7 +134,7 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
             ) : null}
             <MuiTextField
               name="createdOn"
-              label="Hire Date"
+              label="Start Date"
               control={control}
               isAction={isAction}
             />
@@ -163,11 +164,11 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
               control={control}
               isAction={isAction}
             />
-            <MuiTextField
+            <MuiDatePicker
               name="createdOn"
               label="Created Date"
               control={control}
-              isAction={isAction}
+              isReadonly={true}
             />
             <MuiTextField
               name={"modifiedBy"}
@@ -178,6 +179,12 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
             <MuiTextField
               name="modifiedOn"
               label="Modified Date"
+              control={control}
+              isAction={isAction}
+            />
+            <MuiTextField
+              name="createdOn"
+              label="End Date"
               control={control}
               isAction={isAction}
             />

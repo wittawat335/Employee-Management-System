@@ -59,10 +59,7 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
 
   useEffect(() => {
     if (isAddError) {
-      if (addError?.data.StatusCode === 400)
-        toast.error(JSON.stringify(addError?.data?.Message));
-
-      console.log(addError?.data);
+      if (addError?.data.StatusCode === 400) toast.error(JSON.stringify(addError?.data?.Message));
     }
   }, [isAddError]);
 

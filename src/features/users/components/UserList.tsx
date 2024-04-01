@@ -22,7 +22,7 @@ type Props = {
 const UserList = ({ data, handleNew, handleUpdate, handleView }: Props) => {
   const [deleteUser, { isSuccess: deleteSuccess }] = useDeleteUserMutation();
 
-  const handleDelete = async (id: string) => {
+  const handleDelete = (id: string) => {
     try {
       Swal.fire({
         title: "Are you sure?",
@@ -34,7 +34,7 @@ const UserList = ({ data, handleNew, handleUpdate, handleView }: Props) => {
         confirmButtonText: "Yes, delete it!",
       }).then(async (result) => {
         if (result.isConfirmed) {
-          await deleteUser(id);
+          deleteUser(id);
         }
       });
     } catch (err) {
@@ -128,7 +128,9 @@ const UserList = ({ data, handleNew, handleUpdate, handleView }: Props) => {
   };
 
   useEffect(() => {
-    if (deleteSuccess) toast.success(messages.delete_success);
+    if (deleteSuccess) {
+      toast.success(messages.delete_success);
+    }
   }, [deleteSuccess]);
 
   return (

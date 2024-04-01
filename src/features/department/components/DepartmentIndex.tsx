@@ -24,7 +24,8 @@ const DepartmentIndex = () => {
     error,
     isFetching,
     isLoading,
-    isSuccess: fetchingSuccess,
+    isSuccess,
+    //isSuccess: fetchingSuccess,
   } = useGetDepartmentsQuery();
   const navigate = useNavigate();
 
@@ -60,7 +61,7 @@ const DepartmentIndex = () => {
   return (
     <>
       <Container maxWidth={false} sx={{ p: 2 }}>
-        {fetchingSuccess ? (
+        {isSuccess ? (
           <DepartmentList
             data={Departments}
             user={user}
@@ -68,7 +69,6 @@ const DepartmentIndex = () => {
             handleUpdate={handleUpdate}
           />
         ) : null}
-
         <MuiDialog
           title={title}
           openPopup={openDialog}

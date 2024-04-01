@@ -24,7 +24,6 @@ type FormProps = {
 };
 
 const UserForm = ({ auth, onClose, dataToEdit, isAction }: FormProps) => {
-  console.log(dataToEdit);
   const { data: roleList, isSuccess: roleSuccess } = useGetRolesQuery();
   const [addUser, { isSuccess: addSuccess }] = useAddUserMutation();
   const [updateUser, { isSuccess: updateSuccess }] = useUpdateUserMutation();
@@ -72,10 +71,6 @@ const UserForm = ({ auth, onClose, dataToEdit, isAction }: FormProps) => {
       onClose();
     }
   }, [updateSuccess]);
-
-  const isOnSubmit = useCallback((values: UserSchema) => {
-    window.alert(JSON.stringify(values, null, 4));
-  }, []);
 
   return (
     <form onSubmit={handleSubmit(submit)}>

@@ -20,42 +20,39 @@ type Props = {
 };
 
 const DepartmentList = ({ data, user, handleNew, handleUpdate }: Props) => {
-  const [
-    deleteDepartment,
-    { isSuccess: deleteSuccess, isError: deleteIsError, error: deleteError },
-  ] = useDeleteDepartmentMutation();
+  const [deleteDepartment, { isSuccess: deleteSuccess, isError, error }] =
+    useDeleteDepartmentMutation();
 
-  const handleDelete = async (id: string) => {
-    try {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await deleteDepartment(id);
-        }
-      });
-    } catch (err) {
-      console.error("Error deleting :", err);
-    }
+  const handleDelete = (id: string) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteDepartment(id);
+      }
+    });
   };
 
-  useEffect(() => {
-    if (deleteIsError) {
-      alert("1");
-    }
-  }, [deleteIsError]);
+  if (isError) {
+    alert("1");
+    console.log({ error });
+  }
 
-  useEffect(() => {
-    if (deleteSuccess) {
-      toast.success(messages.delete_success);
-    }
-  }, [deleteSuccess]);
+  if (deleteSuccess) {
+    toast.success(messages.delete_success);
+  }
+
+  // useEffect(() => {
+  //   if (deleteSuccess) {
+  //     toast.success(messages.delete_success);
+  //   }
+  // }, [deleteSuccess]);
 
   const columns = [
     {
@@ -143,13 +140,16 @@ const DepartmentList = ({ data, user, handleNew, handleUpdate }: Props) => {
                   <EditOutlinedIcon />
                 </IconButton>
 
-                <IconButton
-                  aria-label="delete"
-                  color="error"
-                  onClick={() => handleDelete(id)}
-                >
-                  <DeleteIcon />
-                </IconButton>
+                {user.roles.indexOf("Administrator") > -1 ||
+                user.roles.indexOf("Developer") > -1 ? (
+                  <IconButton
+                    aria-label="delete"
+                    color="error"
+                    onClick={() => handleDelete(id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                ) : null}
               </ButtonGroup>
             </>
           );

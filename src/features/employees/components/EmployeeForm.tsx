@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
@@ -39,16 +39,7 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
     resolver: zodResolver(EmployeeValidation),
     defaultValues: {
       employeeId: dataToEdit?.employeeId ? dataToEdit?.employeeId : "",
-      fullName: dataToEdit?.fullName ? dataToEdit?.fullName : "",
-      firstName: dataToEdit?.firstName ? dataToEdit?.firstName : "react",
-      lastName: dataToEdit?.lastName ? dataToEdit?.lastName : "test-insert",
-      email: dataToEdit?.email ? dataToEdit?.email : "react@example.com",
-      phoneNumber: dataToEdit?.phoneNumber
-        ? dataToEdit?.phoneNumber
-        : "0933262899",
       departmentId: dataToEdit?.departmentId ? dataToEdit?.departmentId : "",
-      createdBy: dataToEdit?.createdBy ? dataToEdit?.createdBy : user?.username,
-      modifiedBy: isAction == "New" ? user?.username! : dataToEdit?.modifiedBy!,
       gender: dataToEdit?.gender ? dataToEdit?.gender : "M",
       active: dataToEdit?.active ? dataToEdit?.active : "1",
     },
@@ -57,6 +48,7 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
 
   const {
     handleSubmit,
+    reset,
     control,
     formState: { isSubmitting },
   } = methods;
@@ -70,6 +62,14 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
       console.log({ error });
     }
   };
+
+  const testSubmit = useCallback((values: EmployeeSchema) => {
+    window.alert(JSON.stringify(values, null, 4));
+  }, []);
+
+  useEffect(() => {
+    reset(dataToEdit);
+  }, [reset]);
 
   useEffect(() => {
     if (addSuccess) {
@@ -86,7 +86,7 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
   }, [updateSuccess]);
 
   return (
-    <form onSubmit={handleSubmit(submit)}>
+    <form onSubmit={handleSubmit(testSubmit)}>
       <Grid container>
         {" "}
         <Grid item xs={12} sm={12} md={6}>

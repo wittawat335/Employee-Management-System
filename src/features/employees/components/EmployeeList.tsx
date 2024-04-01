@@ -10,6 +10,7 @@ import { messages } from "@/config/messages";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useNavigate } from "react-router-dom";
 
 type Props = {
   data: Array<IEmployeeList>;
@@ -19,27 +20,27 @@ type Props = {
 };
 
 const EmployeeList = ({ data, handleNew, handleUpdate, handleView }: Props) => {
-  const [deleteEmployee, { isSuccess: deleteSuccess }] =
-    useDeleteEmployeeMutation();
+  const [
+    deleteEmployee,
+    { isSuccess: deleteSuccess, isError: deleteError, error },
+  ] = useDeleteEmployeeMutation();
+
+  const navigate = useNavigate();
 
   const handleDelete = async (id: string) => {
-    try {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          await deleteEmployee(id);
-        }
-      });
-    } catch (err) {
-      console.error("Error deleting :", err);
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        await deleteEmployee(id);
+      }
+    });
   };
 
   const columns = [
@@ -157,6 +158,11 @@ const EmployeeList = ({ data, handleNew, handleUpdate, handleView }: Props) => {
   useEffect(() => {
     if (deleteSuccess) toast.success(messages.delete_success);
   }, [deleteSuccess]);
+
+  if (deleteError) {
+    console.log({ error });
+    navigate("/unauthorized");
+  }
 
   return (
     <>

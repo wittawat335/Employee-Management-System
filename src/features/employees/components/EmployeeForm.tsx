@@ -29,6 +29,21 @@ interface FormProps {
 }
 
 const EmployeeForm = ({ onClose, user, dataToEdit, isAction }: FormProps) => {
+  const initialValues = {
+    employeeId: dataToEdit?.employeeId ? dataToEdit?.employeeId : "",
+    firstName: dataToEdit?.firstName ? dataToEdit?.firstName : "",
+    lastName: dataToEdit?.lastName ? dataToEdit?.lastName : "",
+    email: dataToEdit?.email ? dataToEdit?.email : "",
+    phoneNumber: dataToEdit?.phoneNumber ? dataToEdit?.phoneNumber : "",
+    departmentId: dataToEdit?.departmentId ? dataToEdit?.departmentId : "",
+    address: dataToEdit?.address ? dataToEdit?.address : "",
+    gender: dataToEdit?.gender ? dataToEdit?.gender : "M",
+    active: dataToEdit?.active ? dataToEdit?.active : "1",
+    createdBy:
+      isAction == constants.New ? user?.username : dataToEdit?.createdBy,
+    modifiedBy: user?.username,
+  };
+
   const { data: Departments, isSuccess: fetchingSuccess } =
     useGetDepartmentsQuery();
   const [addEmployee, { isSuccess: addSuccess }] = useAddEmployeeMutation();
@@ -37,14 +52,7 @@ const EmployeeForm = ({ onClose, user, dataToEdit, isAction }: FormProps) => {
 
   const methods = useForm<EmployeeSchema>({
     resolver: zodResolver(EmployeeValidation),
-    defaultValues: {
-      employeeId: "",
-      departmentId: "",
-      gender: "M",
-      active: "1",
-      createdBy: user?.username,
-      modifiedBy: user?.username,
-    },
+    defaultValues: initialValues,
     mode: "onChange",
   });
 
@@ -69,9 +77,9 @@ const EmployeeForm = ({ onClose, user, dataToEdit, isAction }: FormProps) => {
     window.alert(JSON.stringify(values, null, 4));
   }, []);
 
-  useEffect(() => {
-    reset(dataToEdit);
-  }, [reset]);
+  // useEffect(() => {
+  //   reset(dataToEdit);
+  // }, [reset]);
 
   useEffect(() => {
     if (addSuccess) {

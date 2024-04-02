@@ -9,13 +9,13 @@ export interface IEmployee {
   address: string;
   departmentId: string;
   active: string;
+  createdBy: string;
+  modifiedBy: string;
 }
 
 export interface IEmployeeList extends IEmployee {
   fullName: string;
   departmentName: string;
-  createdBy: string;
   createdOn: Date;
-  modifiedBy: string;
   modifiedOn: Date;
 }

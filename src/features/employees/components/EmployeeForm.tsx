@@ -3,11 +3,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "react-toastify";
 import { messages } from "@/config/messages";
-import { IEmployeeList } from "@/types/Employee";
+import { IEmployee } from "@/types/Employee";
 import { EmployeeSchema, EmployeeValidation } from "@/lib/validation/schema";
-import { Button, Grid, Stack, TextField } from "@mui/material";
-import { useAppSelector } from "@/hooks/hooks";
-import { selectAuth } from "@/features/auth/services/authSlice";
+import { Button, Grid, Stack } from "@mui/material";
 import { ActiveItems, GenderItems } from "@/data/data";
 import { useGetDepartmentsQuery } from "@/features/department/services/departmentApi";
 import {
@@ -15,21 +13,23 @@ import {
   useUpdateEmployeeMutation,
 } from "../services/employeeApi";
 import {
-  MuiDatePicker,
   MuiRadioGroup,
   MuiSelectField,
   MuiTextField,
   MuiTextFieldArea,
+  MuiTextFieldReadOnly,
 } from "@/components/shared";
+import { constants } from "@/config/constants";
+import { IAuth } from "@/types/Auth";
 
 interface FormProps {
+  user: IAuth | null;
   isAction: string;
-  dataToEdit: IEmployeeList | undefined;
+  dataToEdit: IEmployee | undefined;
   onClose: () => void;
 }
 
-const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
-  const { user } = useAppSelector(selectAuth);
+const EmployeeForm = ({ onClose, user, dataToEdit, isAction }: FormProps) => {
   const { data: Departments, isSuccess: fetchingSuccess } =
     useGetDepartmentsQuery();
   const [addEmployee, { isSuccess: addSuccess }] = useAddEmployeeMutation();
@@ -39,10 +39,12 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
   const methods = useForm<EmployeeSchema>({
     resolver: zodResolver(EmployeeValidation),
     defaultValues: {
-      employeeId: dataToEdit?.employeeId ? dataToEdit?.employeeId : "",
-      departmentId: dataToEdit?.departmentId ? dataToEdit?.departmentId : "",
-      gender: dataToEdit?.gender ? dataToEdit?.gender : "M",
-      active: dataToEdit?.active ? dataToEdit?.active : "1",
+      employeeId: "",
+      departmentId: "",
+      gender: "M",
+      active: "1",
+      createdBy: user?.username,
+      modifiedBy: user?.username,
     },
     mode: "onChange",
   });
@@ -87,35 +89,26 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
   }, [updateSuccess]);
 
   return (
-    <form onSubmit={handleSubmit(testSubmit)}>
+    <form onSubmit={handleSubmit(submit)}>
       <Grid container>
         {" "}
         <Grid item xs={12} sm={12} md={6}>
           <Stack spacing={2} margin={2}>
-            <MuiTextField
-              name={"employeeId"}
-              label={"EmployeeId"}
-              control={control}
-              isAction={isAction}
-            />
+            {isAction != constants.New ? (
+              <MuiTextFieldReadOnly
+                name={"employeeId"}
+                label={"EmployeeId"}
+                control={control}
+              />
+            ) : null}
+
             <MuiTextField
               name={"firstName"}
               label={"First Name"}
               control={control}
               isAction={isAction}
             />
-            <MuiTextField
-              name={"lastName"}
-              label={"Last Name"}
-              control={control}
-              isAction={isAction}
-            />
-            <MuiTextField
-              name={"email"}
-              label={"E-mail"}
-              control={control}
-              isAction={isAction}
-            />
+
             <MuiTextField
               name={"phoneNumber"}
               label={"Phone Number"}
@@ -132,12 +125,6 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
                 optionLabel="departmentName"
               />
             ) : null}
-            <MuiTextField
-              name="createdOn"
-              label="Start Date"
-              control={control}
-              isAction={isAction}
-            />
 
             <MuiRadioGroup
               label={"Gender"}
@@ -149,6 +136,18 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
         </Grid>
         <Grid item xs={12} sm={12} md={6}>
           <Stack spacing={2} margin={2}>
+            <MuiTextField
+              name={"email"}
+              label={"E-mail"}
+              control={control}
+              isAction={isAction}
+            />
+            <MuiTextField
+              name={"lastName"}
+              label={"Last Name"}
+              control={control}
+              isAction={isAction}
+            />
             <MuiTextFieldArea
               name={"address"}
               label={"Address"}
@@ -157,47 +156,18 @@ const EmployeeForm = ({ onClose, dataToEdit, isAction }: FormProps) => {
               rows={4}
               maxRows={4}
             />
+            {isAction != constants.New ? (
+              <MuiRadioGroup
+                label={"Active"}
+                name="active"
+                options={ActiveItems}
+                control={control}
+              />
+            ) : null}
 
-            <MuiTextField
-              name={"createdBy"}
-              label={"Created By"}
-              control={control}
-              isAction={isAction}
-            />
-            <MuiDatePicker
-              name="createdOn"
-              label="Created Date"
-              control={control}
-              isReadonly={true}
-            />
-            <MuiTextField
-              name={"modifiedBy"}
-              label={"Modified By"}
-              control={control}
-              isAction={isAction}
-            />
-            <MuiTextField
-              name="modifiedOn"
-              label="Modified Date"
-              control={control}
-              isAction={isAction}
-            />
-            <MuiTextField
-              name="createdOn"
-              label="End Date"
-              control={control}
-              isAction={isAction}
-            />
-
-            <MuiRadioGroup
-              label={"Active"}
-              name="active"
-              options={ActiveItems}
-              control={control}
-            />
-            {isAction != "View" ? (
+            {isAction != constants.View ? (
               <Button variant="contained" type="submit" disabled={isSubmitting}>
-                Save
+                {isAction == constants.New ? "Save" : "Update"}
               </Button>
             ) : null}
           </Stack>

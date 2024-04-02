@@ -1,5 +1,5 @@
 import { IDepartment } from "@/types/Department";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { toast } from "react-toastify";
 import { messages } from "@/config/messages";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,6 +17,7 @@ import {
   useAddDepartmentMutation,
   useUpdateDepartmentMutation,
 } from "../services/departmentApi";
+import { constants } from "@/config/constants";
 
 type FormProps = {
   user: IAuth | null;
@@ -81,10 +82,14 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
     }
   }, [updateSuccess]);
 
+  const testSubmit = useCallback((values: DepartmenSchema) => {
+    window.alert(JSON.stringify(values, null, 4));
+  }, []);
+
   return (
     <>
       {" "}
-      <form onSubmit={handleSubmit(submit)}>
+      <form onSubmit={handleSubmit(testSubmit)}>
         <Grid container>
           {" "}
           <Grid item xs={12} sm={12} md={12}>
@@ -111,7 +116,7 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
                 />
               ) : null}
               <Button variant="contained" type="submit" disabled={isSubmitting}>
-                {isAction == "New" ? "Save" : "Update"}
+                {isAction == constants.New ? "Save" : "Update"}
               </Button>
             </Stack>
           </Grid>

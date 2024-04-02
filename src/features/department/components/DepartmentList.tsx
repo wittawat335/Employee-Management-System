@@ -85,7 +85,7 @@ const DepartmentList = ({ data, user, handleNew, handleUpdate }: Props) => {
 
     {
       name: "createdBy",
-      label: "CreatedBy",
+      label: "Created By",
     },
     {
       name: "createdOn",
@@ -98,7 +98,7 @@ const DepartmentList = ({ data, user, handleNew, handleUpdate }: Props) => {
     },
     {
       name: "modifiedBy",
-      label: "Modifie dBy",
+      label: "Modified By",
     },
     {
       name: "modifiedOn",

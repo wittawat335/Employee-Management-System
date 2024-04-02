@@ -87,6 +87,7 @@ const Employee = () => {
           setOpenPopup={setOpenDialog}
         >
           <EmployeeForm
+            user={user}
             isAction={isAction}
             dataToEdit={dataToEdit}
             onClose={handleCloseDialog}

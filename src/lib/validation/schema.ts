@@ -32,7 +32,8 @@ export const UserValidation = z.object({
 
 export const EmployeeValidation = z.object({
   employeeId: z.string(),
-  fullName: z.string(),
+  departmentId: z.string(),
+  address: z.string(),
   firstName: z
     .string()
     .min(2, { message: "First Name must be at least 2 characters." }),
@@ -45,7 +46,6 @@ export const EmployeeValidation = z.object({
   email: z.string().email({ message: "Not valid Email" }),
   createdBy: z.string(),
   modifiedBy: z.string(),
-  departmentId: z.string(),
   gender: z.string(),
   active: z.string(),
 });

@@ -12,6 +12,7 @@ import VisibilityOutlinedIcon from "@mui/icons-material/VisibilityOutlined";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { useNavigate } from "react-router-dom";
 import { IAuth } from "@/types/Auth";
+import Moment from "moment";
 
 type Props = {
   data: Array<IEmployeeList>;
@@ -90,19 +91,44 @@ const EmployeeList = ({
         customBodyRender: (value: string) => (
           <p
             className={`capitalize px-3 py-1 inline-block rounded-full text-slate-50 ${
-              value === "M" ? "bg-blue-700" : "bg-rose-600"
+              value === "M"
+                ? "bg-blue-700"
+                : value === "F"
+                ? "bg-rose-600"
+                : "bg-purple-500"
             }`}
           >
-            {value === "M" ? "Male" : "Female"}
+            {value === "M" ? "Male" : value === "F" ? "Female" : "Other"}
           </p>
         ),
       },
     },
     {
-      name: "phoneNumber",
-      label: "Phone Number",
+      name: "createdBy",
+      label: "CreatedBy",
     },
-
+    {
+      name: "createdOn",
+      label: "Created On",
+      options: {
+        customBodyRender: (value: Date) => {
+          return <>{Moment(value).format("DD/MM/YYYY HH:mm")}</>;
+        },
+      },
+    },
+    {
+      name: "modifiedBy",
+      label: "Modified By",
+    },
+    {
+      name: "modifiedOn",
+      label: "Modified On",
+      options: {
+        customBodyRender: (value: Date) => {
+          return <>{Moment(value).format("DD/MM/YYYY HH:mm")}</>;
+        },
+      },
+    },
     {
       name: "active",
       label: "Active",

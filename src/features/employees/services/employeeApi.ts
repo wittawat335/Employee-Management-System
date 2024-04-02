@@ -32,7 +32,7 @@ export const employeeApi = createApi({
       invalidatesTags: ["employees"],
     }),
 
-    updateEmployee: builder.mutation<void, IEmployee>({
+    updateEmployee: builder.mutation<void, Omit<IEmployee, "id">>({
       query: (request) => ({
         url: `/employee`,
         method: "PUT",

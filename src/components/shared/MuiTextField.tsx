@@ -6,9 +6,16 @@ type FormInputProps = {
   label: string;
   control: any;
   isAction: string;
+  isDisable: boolean;
 };
 
-const MuiTextField = ({ name, control, label, isAction }: FormInputProps) => {
+const MuiTextField = ({
+  name,
+  control,
+  label,
+  isAction,
+  isDisable,
+}: FormInputProps) => {
   return (
     <Controller
       name={name}
@@ -23,6 +30,7 @@ const MuiTextField = ({ name, control, label, isAction }: FormInputProps) => {
           fullWidth
           label={label}
           variant="outlined"
+          disabled={isDisable}
         />
       )}
     />

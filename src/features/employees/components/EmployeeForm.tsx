@@ -17,7 +17,6 @@ import {
   MuiSelectField,
   MuiTextField,
   MuiTextFieldArea,
-  MuiTextFieldReadOnly,
 } from "@/components/shared";
 import { constants } from "@/config/constants";
 import { IAuth } from "@/types/Auth";
@@ -58,7 +57,7 @@ const EmployeeForm = ({ onClose, user, dataToEdit, isAction }: FormProps) => {
 
   const submit = async (request: EmployeeSchema) => {
     try {
-      isAction == "New"
+      isAction == constants.New
         ? await addEmployee(request)
         : await updateEmployee(request);
     } catch (error) {
@@ -94,26 +93,27 @@ const EmployeeForm = ({ onClose, user, dataToEdit, isAction }: FormProps) => {
         {" "}
         <Grid item xs={12} sm={12} md={6}>
           <Stack spacing={2} margin={2}>
-            {isAction != constants.New ? (
-              <MuiTextFieldReadOnly
-                name={"employeeId"}
-                label={"EmployeeId"}
-                control={control}
-              />
-            ) : null}
-
             <MuiTextField
-              name={"firstName"}
-              label={"First Name"}
+              name={"employeeId"}
+              label={"EmployeeId"}
               control={control}
               isAction={isAction}
+              isDisable={true}
             />
 
+            <MuiTextField
+              name={"email"}
+              label={"E-mail"}
+              control={control}
+              isAction={isAction}
+              isDisable={false}
+            />
             <MuiTextField
               name={"phoneNumber"}
               label={"Phone Number"}
               control={control}
               isAction={isAction}
+              isDisable={false}
             />
             {fetchingSuccess ? (
               <MuiSelectField
@@ -137,16 +137,19 @@ const EmployeeForm = ({ onClose, user, dataToEdit, isAction }: FormProps) => {
         <Grid item xs={12} sm={12} md={6}>
           <Stack spacing={2} margin={2}>
             <MuiTextField
-              name={"email"}
-              label={"E-mail"}
+              name={"firstName"}
+              label={"First Name"}
               control={control}
               isAction={isAction}
+              isDisable={false}
             />
+
             <MuiTextField
               name={"lastName"}
               label={"Last Name"}
               control={control}
               isAction={isAction}
+              isDisable={false}
             />
             <MuiTextFieldArea
               name={"address"}
@@ -156,14 +159,12 @@ const EmployeeForm = ({ onClose, user, dataToEdit, isAction }: FormProps) => {
               rows={4}
               maxRows={4}
             />
-            {isAction != constants.New ? (
-              <MuiRadioGroup
-                label={"Active"}
-                name="active"
-                options={ActiveItems}
-                control={control}
-              />
-            ) : null}
+            <MuiRadioGroup
+              label={"Active"}
+              name="active"
+              options={ActiveItems}
+              control={control}
+            />
 
             {isAction != constants.View ? (
               <Button variant="contained" type="submit" disabled={isSubmitting}>

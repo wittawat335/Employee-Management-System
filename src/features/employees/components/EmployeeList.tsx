@@ -105,7 +105,7 @@ const EmployeeList = ({
     },
     {
       name: "createdBy",
-      label: "CreatedBy",
+      label: "Created By",
     },
     {
       name: "createdOn",
@@ -136,10 +136,10 @@ const EmployeeList = ({
         customBodyRender: (value: string) => (
           <p
             className={`capitalize px-3 py-1 inline-block rounded-full text-slate-50 ${
-              value ? "bg-green-600" : "bg-rose-600"
+              value == "1" ? "bg-green-600" : "bg-rose-600"
             }`}
           >
-            {value ? <FaCheck /> : <FaXmark />}
+            {value == "1" ? <FaCheck /> : <FaXmark />}
           </p>
         ),
       },

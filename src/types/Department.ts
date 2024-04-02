@@ -3,10 +3,10 @@ export interface IDepartment {
   departmentId: string;
   departmentName: string;
   active: string;
+  createdBy: string;
+  modifiedBy: string | undefined;
 }
 export interface IDepartmentList extends IDepartment {
-  createdBy: string;
   createdOn: Date;
-  modifiedBy: string;
   modifiedOn: Date;
 }

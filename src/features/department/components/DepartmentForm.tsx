@@ -27,6 +27,14 @@ type FormProps = {
 };
 
 const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
+  const initialValues = {
+    departmentId: dataToEdit?.departmentId ? dataToEdit?.departmentId : "",
+    departmentName: dataToEdit?.departmentName ? dataToEdit?.departmentName : "",
+    active: dataToEdit?.active ? dataToEdit?.active : "1",
+    createdBy: isAction == constants.New ? user?.username : dataToEdit?.createdBy,
+    modifiedBy: user?.username,
+  };
+
   const [
     addDepartment,
     { isSuccess: addSuccess, isError: isAddError, error: addError },
@@ -36,12 +44,7 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
 
   const methods = useForm<DepartmenSchema>({
     resolver: zodResolver(DepartmentValidation),
-    defaultValues: {
-      departmentId: "",
-      active: "1",
-      createdBy: user?.username,
-      modifiedBy: user?.username,
-    },
+    defaultValues: initialValues,
     mode: "onChange",
   });
 
@@ -60,13 +63,10 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
 
   useEffect(() => {
     if (isAddError) {
-      if (addError?.data.StatusCode === 400) toast.error(JSON.stringify(addError?.data?.Message));
+      if (addError?.data.StatusCode === 400)
+        toast.error(JSON.stringify(addError?.data?.Message));
     }
   }, [isAddError]);
-
-  useEffect(() => {
-    reset(dataToEdit);
-  }, [reset]);
 
   useEffect(() => {
     if (addSuccess) {
@@ -89,7 +89,7 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
   return (
     <>
       {" "}
-      <form onSubmit={handleSubmit(testSubmit)}>
+      <form onSubmit={handleSubmit(submit)}>
         <Grid container>
           {" "}
           <Grid item xs={12} sm={12} md={12}>
@@ -106,6 +106,7 @@ const DepartmentForm = ({ user, onClose, dataToEdit, isAction }: FormProps) => {
                 label={"Department Name"}
                 control={control}
                 isAction={isAction}
+                isDisable={false}
               />
               {isAction == "Edit" ? (
                 <MuiRadioGroup
